@@ -6,7 +6,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Value;
 
 @RestController
 public class EmailController {
@@ -14,16 +13,13 @@ public class EmailController {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Value("${email.recipient}")
-    private String recipient;
-
     @PostMapping("/send-email")
-    public String sendEmail(@RequestParam String message) {
+    public String sendEmail(@RequestParam String message, @RequestParam String recipient) {
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipient);
+        email.setSubject("Weather Update");
         email.setText(message);
         mailSender.send(email);
         return "Message sent!";
     }
-
 }
