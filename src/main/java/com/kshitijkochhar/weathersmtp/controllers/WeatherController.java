@@ -1,5 +1,6 @@
 package com.kshitijkochhar.weathersmtp.controllers;
 
+import com.kshitijkochhar.weathersmtp.services.GeminiService;
 import com.kshitijkochhar.weathersmtp.services.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,9 @@ public class WeatherController {
 
     @Autowired
     private WeatherService weatherService;
+    
+    @Autowired
+    private GeminiService geminiService;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -34,8 +38,8 @@ public class WeatherController {
             // Fetch weather data
             Map<String, Object> weatherData = weatherService.getCurrentWeather(latitude, longitude);
             
-            // Format the weather message
-            String message = weatherService.formatWeatherMessage(weatherData);
+            // Generate a fun message using Gemini API
+            String message = geminiService.generateWeatherMessage(weatherData);
             
             // Send email
             SimpleMailMessage email = new SimpleMailMessage();
